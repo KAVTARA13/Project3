@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="0d839e79-b3c6-426a-9bf1-af8844996304" activeEnvironment="Default" name="REST Project 3" resourceRoot="" soapui-version="5.6.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="9bc91cb9-c218-463a-87c8-d4d930e85738" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://demoqa.com" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>https://demoqa.com</con:endpoint></con:endpoints><con:resource name="Books" path="/BookStore/v1/Books" id="8b8ffd66-ba95-403c-839e-ef8087ac4c2f"><con:settings/><con:parameters/><con:method name="Books 1" id="04ce1bc1-19a8-4479-aeeb-ff5499e7238b" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:book="https://demoqa.com/BookStore/v1/Books">book:Response</con:element></con:representation><con:request name="Request 1" id="6d85198b-98fc-4408-be85-46936735aa8b" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://demoqa.com</con:endpoint><con:request/><con:originalUri>https://demoqa.com/BookStore/v1/Books</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:testSuite id="c9e50eb9-5879-4335-89e2-00a24e91ee69" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="26755600-f8d5-4c9c-ab6e-47d6d913c403" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="Books 1 - Request 1" id="28826f32-7a9d-4bf5-9822-bba68706d86f"><con:settings/><con:config service="https://demoqa.com" resourcePath="/BookStore/v1/Books" methodName="Books 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Books 1 - Request 1" id="6d85198b-98fc-4408-be85-46936735aa8b" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://demoqa.com</con:endpoint><con:request/><con:originalUri>https://demoqa.com/BookStore/v1/Books</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="80726f60-ccb3-4ced-9222-e179dfbe491b"><con:settings/><con:config><script>def resp = testRunner.testCase.getTestStepByName('Books 1 - Request 1').getPropertyValue('response')
+def jsonSlurper = new groovy.json.JsonSlurper()
+def object = jsonSlurper.parseText(resp)
+
+def size = object.books.isbn.size()
+def index = 0
+
+while (index&lt;size){
+	
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('isbn',object.books[index].isbn)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('title',object.books[index].title)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('subTitle',object.books[index].subTitle)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('author',object.books[index].author)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('publish_date',object.books[index].publish_date)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('publisher',object.books[index].publisher)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('pages',object.books[index].pages.toString())
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('description',object.books[index].description)
+	testRunner.testCase.getTestStepByName('Properties').setPropertyValue('website',object.books[index].website)
+
+	testRunner.runTestStepByName('JDBC Request')
+	
+	index++
+	}</script></con:config></con:testStep><con:testStep type="properties" name="Properties" id="8da5d27a-420c-4533-9fd9-ee7d8c0ed2ad"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>isbn</con:name><con:value>9781593277574</con:value></con:property><con:property><con:name>title</con:name><con:value>Understanding ECMAScript 6</con:value></con:property><con:property><con:name>subTitle</con:name><con:value>The Definitive Guide for JavaScript Developers</con:value></con:property><con:property><con:name>author</con:name><con:value>Nicholas C. Zakas</con:value></con:property><con:property><con:name>publish_date</con:name><con:value>2016-09-03T00:00:00.000Z</con:value></con:property><con:property><con:name>publisher</con:name><con:value>No Starch Press</con:value></con:property><con:property><con:name>pages</con:name><con:value>352</con:value></con:property><con:property><con:name>description</con:name><con:value>ECMAScript 6 represents the biggest update to the core of JavaScript in the history of the language. In Understanding ECMAScript 6, expert developer Nicholas C. Zakas provides a complete guide to the object types, syntax, and other exciting changes that E</con:value></con:property><con:property><con:name>website</con:name><con:value>https://leanpub.com/understandinges6/read</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="jdbc" name="JDBC Request" id="ceee4c87-4391-4838-99d2-9a8e3e0ddae5"><con:settings/><con:config xsi:type="con:JdbcRequestTestStep" convertColumnNamesToUpperCase="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</con:driver><con:connectionString>jdbc:sqlserver://localhost;username=TestAutomation;password=TestAutomation123</con:connectionString><con:query>INSERT INTO [books].[dbo].[books]
+OUTPUT inserted.isbn, inserted.title, inserted.subTitle, inserted.author, inserted.publish_date, inserted.publisher, inserted.pages, inserted.description, inserted.website
+VALUES (:isbn, :title, :subTitle, :author, :publish_date, :publisher, :pages, :description, :website)</con:query><con:assertion type="XPath Match" id="e1ce1d45-a2c2-48d6-91f2-30adab699437" name="ISBN"><con:configuration><path>//ISBN</path><content>${Properties#isbn}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="95cc2c1a-65ac-4cb9-8816-7c24216b56b3" name="TITLE"><con:configuration><path>//TITLE</path><content>${Properties#title}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match"/><con:assertion type="XPath Match" id="ad05c003-e970-42d4-959d-c7ddded045b3" name="SUBTITLE"><con:configuration><path>//SUBTITLE</path><content>${Properties#subTitle}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="733ab42c-9dcc-490b-8e1c-8a8362e3c880" name="AUTHOR"><con:configuration><path>//AUTHOR</path><content>${Properties#author}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="6c8a6847-c7d1-43fe-ad5c-54d23d18f03e" name="PUBLISH_DATE"><con:configuration><path>//PUBLISH_DATE</path><content>${Properties#publish_date}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="f5f386eb-e230-4da5-a5a2-401c38d125ca" name="PUBLISHER"><con:configuration><path>//PUBLISHER</path><content>${Properties#publisher}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="4bd36d81-7c9d-4787-ad8e-3dc0be0a4656" name="PAGES"><con:configuration><path>//PAGES</path><content>${Properties#pages}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="f3fb877a-cb9d-4d74-81fa-1f3ffbb9f62c" name="DESCRIPTION"><con:configuration><path>//DESCRIPTION</path><content>${Properties#description}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" id="370f9d84-2dd2-439f-9e7d-202f774b0c65" name="WEBSITE"><con:configuration><path>//WEBSITE</path><content>${Properties#website}</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:properties><con:property><con:name>isbn</con:name><con:value>${Properties#isbn}</con:value></con:property><con:property><con:name>title</con:name><con:value>${Properties#title}</con:value></con:property><con:property><con:name>subTitle</con:name><con:value>${Properties#subTitle}</con:value></con:property><con:property><con:name>author</con:name><con:value>${Properties#author}</con:value></con:property><con:property><con:name>publish_date</con:name><con:value>${Properties#publish_date}</con:value></con:property><con:property><con:name>publisher</con:name><con:value>${Properties#publisher}</con:value></con:property><con:property><con:name>pages</con:name><con:value>${Properties#pages}</con:value></con:property><con:property><con:name>description</con:name><con:value>${Properties#description}</con:value></con:property><con:property><con:name>website</con:name><con:value>${Properties#website}</con:value></con:property></con:properties></con:config></con:testStep><con:tearDownScript>// Code to execute the GenerateCSVReport test step
+testRunner.testCase.testSuite.project.testSuites["Library"].testCases["Reporting_Utility"].
+testSteps["GenerateCSVReport"].run(testRunner, context);</con:tearDownScript><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="93965d28-58f7-4496-89b3-c32a99526df8" name="Library" disabled="true"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="5dbd2b75-6bc7-458e-9d86-3246982d0952" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Reporting_Utility" searchProperties="true"><con:settings/><con:testStep type="groovy" name="GenerateCSVReport" id="c89ba19a-7e06-4df2-9388-0727391df630"><con:settings/><con:config><script>// Try-catch block to handle exceptions
+try {
+
+// 1. Create a "SoapUIResults" folder in the project path 
+      // Retrieve the project root folder
+      def projectPath = new com.eviware.soapui.support.GroovyUtils(context).projectPath
+
+      // Specify a folder inside project root to store the results
+      String folderPath = projectPath + "/SoapUIResults";
+
+      // Create a File object for the specified path
+      def resultFolder = new File(folderPath);
+
+      // Check for existence of folder and create a folder
+      if(!resultFolder.exists())
+      {
+        resultFolder.mkdirs();
+      }
+
+/* ------------------------------------------------------------------------------- */
+
+// 2. Create a subfolder (with timestamp) to store the request-response local copy 
+      // Retrieve the latest execution date-time
+      Date d = new Date();
+      def executionDate = d.format("dd-MMM-yyyy HH_mm");
+
+      // Specify the subfolder path with name Request-Response_CurrentTimeStamp
+      String subfolderPath1 = folderPath+ "/Request-Response_"+executionDate;
+
+      // Create this sub-folder
+      new File(subfolderPath1).mkdirs();
+
+/* ------------------------------------------------------------------------------- */
+
+// 3. Create another subfolder "CSV Reports" to store the reports file 
+      // Specify the subfolder path with name CSV Reports
+      String subfolderPath2 = folderPath+ "/CSV Reports";
+
+      // Create this sub-folder
+      new File(subfolderPath2).mkdirs();
+
+/* ------------------------------------------------------------------------------- */
+
+// 4. Create a Report.csv file inside the CSV Reports folder 
+      // Create a File object for Report csv file (with timestamp)
+      def reportFile = new File(subfolderPath2, "Report_"+executionDate+".csv");
+
+      // Check for existence of report file and create a file
+      if(!reportFile.exists())
+      {
+        reportFile.createNewFile();
+        // Create required column names in the report file
+        reportFile.write('"Test Suite","Test Case","Test Step","Step Type","Step Status",'
+                        +'"Result message","Execution Date"');
+      }
+/* ------------------------------------------------------------------------------- */
+// 5. Inserting data in the file
+      // Iterate over all the test steps results
+  for(stepResult in testRunner.getResults())
+  {
+    // Retrieve Test Suite name
+   def testSuite = testRunner.testCase.testSuite.name;
+   // Retrieve Test Case name
+   def testCase = testRunner.testCase.name;
+   // Retrieve Test Step
+   def testStep = stepResult.getTestStep();
+   // Retrieve Test Step name
+   def testStepName = testStep.name
+   // Retrieve Test Step type
+   def type = testStep.config.type
+   // Retrieve Test Step status
+   def status = stepResult.getStatus()
+
+   // Creating new line in report file
+   reportFile.append('\n');
+
+   // Write all the necessary information in the file
+   reportFile.append('"' + testSuite + '",');
+   reportFile.append('"' + testCase + '",');
+   reportFile.append('"' + testStepName + '",');
+   reportFile.append('"' + type + '",');
+   reportFile.append('"' + status + '",');
+
+   // Retrieve the test result messages
+   reportFile.append('"');
+   for(resMessage in stepResult.getMessages())
+   {
+     // Write messages and separate multiple messages by new line
+     reportFile.append('Message:' + resMessage + '\n');
+   }
+   reportFile.append('",');
+
+   //Write executionDate in the file
+   reportFile.append('"' + executionDate + '",');
+/* ------------------------------------------------------------------------------- */
+// 6. Extract the request and response and save it to external file
+      // Verify if the test step type is request: SOAP project or restrequest: REST project
+        if((type=="request").or(type=="restrequest"))
+        {
+          // Extract the request from the test step
+          def extRequest = testStep.properties["Request"].value;    
+
+      // Create a file in the reports folder and write the request
+      // Naming convention: request_TestSuiteName_TestCaseName_TestStepName.txt
+      def requestFile=subfolderPath1+"/request_"+testSuite+"_"+testCase+"_"+testStepName+".txt";
+      def rqfile = new File(requestFile);
+      rqfile.write(extRequest, "UTF-8");
+
+      // Extract the response from the test step
+      def extResponse = stepResult.getResponseContent();    
+
+      // Create a file in the reports folder and write the response
+      // Naming convention: response_TestSuiteName_TestCaseName_TestStepName.txt
+      def responseFile=subfolderPath1+"/response_"+testSuite+"_"+testCase+"_"+testStepName+".txt";
+      def rsfile = new File(responseFile);
+      rsfile.write(extResponse, "UTF-8");
+     }
+   }
+ }
+catch(exc)
+{
+   log.error("Exception happened: " + exc.toString());
+}</script></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
